@@ -12,7 +12,7 @@
 #' @export
 extract_recipient_details <- function(path, regex = regex_pattern()) {
   txt <- pdf_text(path)
-  # https://regex101.com/r/wHv4Nk/1
+  # https://regex101.com/r/wHv4Nk/2
   match <- stringr::str_match(txt, regex)
   recipient <- as_tibble(head(match,1), .name_repair = "unique") %>%
     magrittr::set_colnames(c("match", "name", "BTW", "street", "postal_code", "city", "email", "phone")) %>%
@@ -40,7 +40,7 @@ invoice_folder_to_adress_book <- function(dir) {
   adress_book <- invoices %>%
     mutate(
       recipient = map(invoice, extract_recipient_details)
-    ) %>%
+    ) %>%g
     unnest(recipient)
   return(adress_book)
 }
