@@ -14,8 +14,8 @@ extract_recipient_details <- function(path, regex = regex_pattern()) {
   txt <- pdf_text(path)
   # https://regex101.com/r/wHv4Nk/1
   match <- stringr::str_match(txt, regex)
-  recipient <- as_tibble(match, .name_repair = "unique") %>%
-    magrittr::set_colnames(c("match", "name", "street", "postal_code", "city", "email", "phone")) %>%
+  recipient <- as_tibble(head(match,1), .name_repair = "unique") %>%
+    magrittr::set_colnames(c("match", "name", "BTW", "street", "postal_code", "city", "email", "phone")) %>%
     select(-match)
   return(recipient)
 }
