@@ -12,5 +12,9 @@ LazyData: true
 Imports: 
     pdftools,
     stringr,
-    magrittr
+    magrittr,
+    tibble,
+    dplyr,
+    tidyr,
+    purrr
 RoxygenNote: 7.0.2
