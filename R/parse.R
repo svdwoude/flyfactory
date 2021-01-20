@@ -29,6 +29,7 @@ extract_recipient_details <- function(path, regex = regex_pattern()) {
 #' @param dir \code{string} path of invoice folder
 #'
 #' @importFrom tibble enframe
+#' @importFrom magrittr "%>%"
 #' @importFrom purrr map
 #' @importFrom dplyr mutate
 #' @importFrom tidyr unnest
@@ -40,7 +41,7 @@ invoice_folder_to_adress_book <- function(dir) {
   adress_book <- invoices %>%
     mutate(
       recipient = map(invoice, extract_recipient_details)
-    ) %>%g
+    ) %>%
     unnest(recipient)
   return(adress_book)
 }
