@@ -14,9 +14,12 @@ extract_recipient_details <- function(path, regex = regex_pattern()) {
   txt <- pdf_text(path)
   # https://regex101.com/r/wHv4Nk/2
   match <- stringr::str_match(txt, regex)
-  recipient <- as_tibble(head(match,1), .name_repair = "unique") %>%
-    magrittr::set_colnames(c("match", "name", "BTW", "street", "postal_code", "city", "email", "phone")) %>%
-    select(-match)
+  pb$tick()
+  suppressMessages(
+    recipient <- as_tibble(head(match,1), .name_repair = "minimal") %>%
+      magrittr::set_colnames(c("match", "name", "BTW", "street", "postal_code", "city", "email", "phone")) %>%
+      select(-match)
+  )
   return(recipient)
 }
 
@@ -33,11 +36,13 @@ extract_recipient_details <- function(path, regex = regex_pattern()) {
 #' @importFrom purrr map
 #' @importFrom dplyr mutate
 #' @importFrom tidyr unnest
+#' @importFrom progress progress_bar
 #' @export
 invoice_folder_to_adress_book <- function(dir) {
 
-  files <- paste0(dir, "/", list.files(dir, pattern = "*.pdf"))
+  files <- paste0(dir, "/", list.files(dir, pattern = "*.pdf", recursive = TRUE))
   invoices <- enframe(files, name = "index", value = "invoice")
+  pb <- progress_bar$new(total = nrow(invoices))
   adress_book <- invoices %>%
     mutate(
       recipient = map(invoice, extract_recipient_details)
