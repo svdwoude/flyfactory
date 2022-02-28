@@ -12,7 +12,6 @@
 #' @export
 extract_recipient_details <- function(path, regex = regex_pattern()) {
   txt <- pdf_text(path)
-  # https://regex101.com/r/wHv4Nk/2
   match <- stringr::str_match(txt, regex)
   pb$tick()
   suppressMessages(
